@@ -1,0 +1,40 @@
+body {
+    background-color: #222;
+    color: #eee;
+    font-family: 'Courier New', monospace;
+  }
+  
+  a {
+    color: #66b2ff;
+  }
+  
+  .container {
+    margin-top: 30px;
+  }
+  
+  .section {
+    margin-bottom: 40px;
+  }
+  
+  .card {
+    border: none;
+  }
+  
+  .card-header {
+    background-color: #444;
+    color: #eee;
+  }
+  
+  .card-body {
+    background-color: #3a3a3a; 
+    color: #fff;              
+  }
+  
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .text-muted {
+    color: #ccc !important;
+  }

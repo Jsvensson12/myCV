@@ -4,14 +4,17 @@
   "description": "When you're ready, start your application by running: `docker compose up --build`.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",  
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.1.0"
   }
 }
-

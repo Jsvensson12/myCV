@@ -28,7 +28,7 @@ jobs:
 
           - name: Tear down container
             if: always()
-            run: docker-compose -f compose.yaml down
+            run: docker compose -f compose.yaml down
 
 
             

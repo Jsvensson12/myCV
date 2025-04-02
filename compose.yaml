@@ -6,4 +6,8 @@ services:
       NODE_ENV: development
     ports:
       - 3000:3000
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 

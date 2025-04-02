@@ -16,7 +16,7 @@ app.get('/info', (req, res) => {
         version: process.env.IMAGE_VERSION || 'Dev',
         commit: process.env.GIT_COMMIT_SHA || 'Unknown',
         nodeEnv: process.env.NODE_ENV || 'Development',
-        timespamp: new Date().toISOString()
+        timestamp: new Date().toISOString()
 
     })
 })

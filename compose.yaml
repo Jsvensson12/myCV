@@ -4,10 +4,10 @@ services:
       context: .
     environment:
       NODE_ENV: development
+      NODE_OPTIONS: "--max-old-space-size=1900"
     ports:
-      - 3000:3000
+      - "3000:3000"
     deploy:
       resources:
         limits:
-          memory: 2G
-
+          memory: 4G

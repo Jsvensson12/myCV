@@ -1,3 +1,3 @@
 module.exports = {
-    maxworkers: 2,
+    maxWorkers: 2,
 }

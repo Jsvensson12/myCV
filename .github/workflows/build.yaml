@@ -16,6 +16,19 @@ jobs:
           - name: checkout Repository
             uses: actions/checkout@v3
 
+          - name: Azure login
+            uses: azure/login@1
+            with:
+              creds: ${{secrets.AZURE_CREDENTIALS}}
+
+          - name: Create resource group
+            run: |
+               az group create --name cv-resource-group --location "West Europe" --parameters rgDeploy=true
+
+          - name: Deploy registry
+            run: |
+              az deployment group create --resource-group cv-resource-group --templatefile main.bicep --parameters acrDeploy=true
+
           - name: Set up Docker Buildx
             uses: docker/setup-buildx-action@v2
 

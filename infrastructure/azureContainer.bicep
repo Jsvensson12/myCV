@@ -49,5 +49,3 @@ resource container 'Microsoft.ContainerInstance/containerGroups@2021-07-01' = {
   }
 }
 
-output ipAddress string = container.properties.ipAddress.fqdn
-output containerName string = container.name

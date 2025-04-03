@@ -50,5 +50,5 @@ jobs:
           az deployment group create \
             --resource-group cv-resource-group \
             --template-file infrastructure/main.bicep \
-            --parameters containerDeploy=true containerName="mycvcontainer" image="ghcr.io/jsvensson12/mycvimage:latest" location="West Europe"
+            --parameters containerName="mycvcontainer" image="ghcr.io/jsvensson12/mycvimage:latest" location="West Europe"
 

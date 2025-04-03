@@ -16,18 +16,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      
       - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      
       - name: Create Resource Group
         run: |
           az group create --name cv-resource-group --location "West Europe"
 
-      
+      # Log in to Docker Hub before building the image
+      - name: Docker Hub Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v3
         with:
@@ -35,15 +39,10 @@ jobs:
           file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/mycvimage:latest
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-
-      
       - name: Deploy ACI with Bicep
         run: |
           az deployment group create \
             --resource-group cv-resource-group \
             --template-file aci.bicep \
             --parameters image="${{ secrets.DOCKER_HUB_USERNAME }}/mycvimage:latest" containerName="mycvcontainer"
-

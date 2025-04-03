@@ -25,24 +25,25 @@ jobs:
         run: |
           az group create --name cv-resource-group --location "West Europe"
 
-      # Log in to Docker Hub before building the image
-      - name: Docker Hub Login
+      # Log in to GitHub Container Registry (GHCR)
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Docker Image to GHCR
         uses: docker/build-push-action@v3
         with:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/mycvimage:latest
+          tags: ghcr.io/${{ github.repository_owner }}/mycvimage:latest
 
       - name: Deploy ACI with Bicep
         run: |
           az deployment group create \
             --resource-group cv-resource-group \
             --template-file infrastructure/main.bicep \
-            --parameters image="${{ secrets.DOCKER_HUB_USERNAME }}/mycvimage:latest" containerName="mycvcontainer"
+            --parameters containerDeploy=true containerName="mycvcontainer" image="ghcr.io/${{ github.repository_owner }}/mycvimage:latest" location="West Europe"

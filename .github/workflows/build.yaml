@@ -1,47 +1,49 @@
-name: Build and test with Docker
+name: Build, Push, and Deploy to ACI
 
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-        steps:
-          - name: checkout Repository
-            uses: actions/checkout@v3
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-          - name: Azure login
-            uses: azure/login@1
-            with:
-              creds: ${{secrets.AZURE_CREDENTIALS}}
+      
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-          - name: Create resource group
-            run: |
-               az group create --name cv-resource-group --location "West Europe" --parameters rgDeploy=true
+      
+      - name: Create Resource Group
+        run: |
+          az group create --name cv-resource-group --location "West Europe"
 
-          - name: Deploy registry
-            run: |
-              az deployment group create --resource-group cv-resource-group --templatefile main.bicep --parameters acrDeploy=true
-
-          - name: Set up Docker Buildx
-            uses: docker/setup-buildx-action@v2
-
-          - name: Build and start container
-            run: docker compose -f compose.yaml up --build -d
-
-          - name: run tests
-            run: |
-               docker compose -f compose.yaml exec server npm test
-
-          - name: Tear down container
-            if: always()
-            run: docker compose -f compose.yaml down
+      
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/mycvimage:latest
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
 
-            
+      
+      - name: Deploy ACI with Bicep
+        run: |
+          az deployment group create \
+            --resource-group cv-resource-group \
+            --template-file aci.bicep \
+            --parameters image="${{ secrets.DOCKER_HUB_USERNAME }}/mycvimage:latest" containerName="mycvcontainer"
+

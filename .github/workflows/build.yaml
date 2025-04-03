@@ -39,11 +39,12 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/mycvimage:latest
+          tags: ghcr.io/jsvensson12/mycvimage:latest
 
       - name: Deploy ACI with Bicep
         run: |
           az deployment group create \
             --resource-group cv-resource-group \
             --template-file infrastructure/main.bicep \
-            --parameters containerDeploy=true containerName="mycvcontainer" image="ghcr.io/${{ github.repository_owner }}/mycvimage:latest" location="West Europe"
+            --parameters containerDeploy=true containerName="mycvcontainer" image="ghcr.io/jsvensson12/mycvimage:latest" location="West Europe"
+

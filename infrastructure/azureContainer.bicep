@@ -2,7 +2,7 @@
 param containerName string = 'mycvcontainer'
 
 @description('The Docker image to deploy')
-param image string = 'yourDockerHubUsername/yourImage:latest'
+param image string = 'js9505/mycvimage:latest'
 
 @description('CPU cores for the container')
 param cpuCores int = 1

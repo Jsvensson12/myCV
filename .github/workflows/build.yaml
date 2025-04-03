@@ -45,4 +45,4 @@ jobs:
           az deployment group create \
             --resource-group cv-resource-group \
             --template-file infrastructure/main.bicep \
-            --parameters containerDeploy=true image="${{ secrets.DOCKER_HUB_USERNAME }}/mycvimage:latest" containerName="mycvcontainer"
+            --parameters image="${{ secrets.DOCKER_HUB_USERNAME }}/mycvimage:latest" containerName="mycvcontainer"
